@@ -41,8 +41,6 @@ Express and any runtime that speaks `fetch`'s `Request` and `Response`. It has n
 npm install @popnow/proxy
 ```
 
-npm builds the package on install (the `prepare` script), so nothing else is needed.
-
 **2. Set your API key on the server** from [popnow.ai/api/console/keys](https://popnow.ai/api/console/keys).
 It is read from `POPNOW_API_KEY` and never sent to the client.
 
