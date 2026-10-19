@@ -1,0 +1,70 @@
+{
+  "name": "@popnow/proxy",
+  "version": "0.1.0",
+  "description": "Server-side proxy for the PopNow API: let browser, mobile and desktop apps generate AI video, images and music without ever holding an API key.",
+  "type": "module",
+  "license": "MIT",
+  "author": "PopNow (https://popnow.ai)",
+  "homepage": "https://github.com/popnow-ai/popnow-proxy#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/popnow-ai/popnow-proxy.git"
+  },
+  "bugs": {
+    "url": "https://github.com/popnow-ai/popnow-proxy/issues"
+  },
+  "keywords": [
+    "popnow",
+    "proxy",
+    "api-proxy",
+    "api-key",
+    "nextjs",
+    "express",
+    "ai-video",
+    "ai-video-generator",
+    "text-to-video",
+    "image-to-video",
+    "text-to-image",
+    "ai-image-generator",
+    "ai-music"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "engines": {
+    "node": ">=22.12.0"
+  },
+  "main": "./dist/src/index.js",
+  "types": "./dist/src/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/src/index.d.ts",
+      "import": "./dist/src/index.js"
+    },
+    "./nextjs": {
+      "types": "./dist/src/nextjs.d.ts",
+      "import": "./dist/src/nextjs.js"
+    },
+    "./express": {
+      "types": "./dist/src/express.d.ts",
+      "import": "./dist/src/express.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist/src",
+    "README.md",
+    "SECURITY.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "node -e \"require('node:fs').rmSync('dist',{recursive:true,force:true})\" && tsc -p tsconfig.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "npm run build && node --test dist/test/*.test.js",
+    "prepare": "npm run build"
+  },
+  "devDependencies": {
+    "@types/node": "22.20.5",
+    "typescript": "5.9.3"
+  }
+}

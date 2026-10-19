@@ -1,0 +1,27 @@
+# popnow-proxy
+
+> `@popnow/proxy` is a small server-side proxy for the PopNow API (https://popnow.ai): it lets a browser, mobile or desktop app generate AI video, images and music through the developer's own backend while the API key stays on the server. TypeScript, zero runtime dependencies, Node.js 22.12+, MIT licensed.
+
+## Install
+
+- `npm install github:popnow-ai/popnow-proxy` (npm release coming soon). Set `POPNOW_API_KEY` (`sk-popnow-...`, from https://popnow.ai/api/console/keys) on the server.
+
+## Usage
+
+- Next.js App Router: `app/api/popnow/proxy/route.ts` with `export { GET, POST, PUT, PATCH, DELETE } from "@popnow/proxy/nextjs"; export const runtime = "nodejs";`. Options via `createRoute({...})`.
+- Express: `app.all("/api/popnow/proxy", createExpressHandler())` from `@popnow/proxy/express`, mounted before body parsers.
+- Any fetch runtime: `createProxyHandler(options)` returns `(Request) => Promise<Response>`.
+- The client sends the real API URL in the `x-popnow-target-url` header, e.g. `https://api.popnow.ai/api/v1/jobs/createTask`.
+
+## Behaviour
+
+- Forwards only to the exact origin `https://api.popnow.ai` (option `allowedOrigins`) and only the documented API routes with their documented methods (`DEFAULT_ROUTES`, option `allowedRoutes`): `/api/v1/jobs/{quote,createTask,recordInfo,retry,purge}`, `/api/v1/jobs`, `/api/v1/models[/{model}]`, `/api/v1/usage`, `/api/v1/chat/credit`, `/api/v1/common/{upload-url,download-url}`, `/api/v1/files/{fileId}/commit`, `/api/v1/files/import`, `/api/v1/assets*`, `/v1/models`, `/v1/videos*`.
+- Replaces client `authorization`, `x-api-key`, `x-goog-api-key`, `cookie` and `user-agent`; sends `Authorization: Bearer <server key>` and `User-Agent: popnow-proxy/<version>`.
+- Streams bodies; passes redirects back (e.g. `/v1/videos/{id}/content`); `timeoutMs` (default 120000) bounds only the wait for response headers.
+- Refusals use the API envelope `{code, msg, request_id}`: 400 missing/invalid target, 403 origin or route not allowed, 500 no key, 502 unreachable, 504 timeout.
+- It does not authenticate end users; add session checks and rate limits in front.
+
+## Links
+
+- Docs: https://popnow.ai/docs · OpenAPI: https://popnow.ai/docs/openapi.yaml · Pricing: https://popnow.ai/pricing
+- JavaScript SDK: https://github.com/popnow-ai/popnow-js · CLI: https://github.com/popnow-ai/popnow-cli · MCP: https://popnow.ai/mcp
