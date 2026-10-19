@@ -4,7 +4,7 @@
 
 ## Install
 
-- `npm install github:popnow-ai/popnow-proxy` (npm release coming soon). Set `POPNOW_API_KEY` (`sk-popnow-...`, from https://popnow.ai/api/console/keys) on the server.
+- `npm install @popnow/proxy`. Set `POPNOW_API_KEY` (`sk-popnow-...`, from https://popnow.ai/api/console/keys) on the server.
 
 ## Usage
 

@@ -35,10 +35,10 @@ Express and any runtime that speaks `fetch`'s `Request` and `Response`. It has n
 
 ## Quickstart
 
-**1. Install** (Node.js 22.12 or newer). The npm release is coming soon; until then, install from GitHub:
+**1. Install** (Node.js 22.12 or newer):
 
 ```bash
-npm install github:popnow-ai/popnow-proxy
+npm install @popnow/proxy
 ```
 
 npm builds the package on install (the `prepare` script), so nothing else is needed.
