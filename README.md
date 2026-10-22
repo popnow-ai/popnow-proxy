@@ -288,7 +288,7 @@ Next.js set `runtime = "nodejs"`; on other runtimes pass the key explicitly with
 ### How do I show the price before the user generates?
 
 Forward `POST /api/v1/jobs/quote` with the same `model` and `input` first; it returns the price in credits
-without holding anything (1 credit = $0.01, see [popnow.ai/pricing](https://popnow.ai/pricing)).
+without holding anything (1 credit = $0.001, see [popnow.ai/pricing](https://popnow.ai/pricing)).
 
 ### Does the proxy retry or deduplicate requests?
 

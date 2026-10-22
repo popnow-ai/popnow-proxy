@@ -3,6 +3,13 @@
 All notable changes to this project are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and the project uses [Semantic Versioning](https://semver.org/).
 
+## [Unreleased]
+
+### Changed
+
+- Docs: PopNow credits are worth $0.001 each since 2026-10-19 (they were $0.01), so prices in credits are
+  larger numbers than before. No code change.
+
 ## [0.1.0] - 2026-10-19
 
 ### Added
