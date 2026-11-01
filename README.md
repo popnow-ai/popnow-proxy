@@ -29,7 +29,7 @@ music and speech, one-tap trending video effects and image styles, with models s
 Vidu, MiniMax, Nano Banana, GPT Image, Flux and Suno.
 
 A key compiled into a client is a public key. Anyone can open the bundle or watch one request, and then spend
-your credits until they run out. The fix is not obfuscation; it is to never put the key there. The app calls
+your API balance until it runs out. The fix is not obfuscation; it is to never put the key there. The app calls
 **your** server, and your server adds the credential. This package is that server-side hop, for Next.js,
 Express and any runtime that speaks `fetch`'s `Request` and `Response`. It has no runtime dependencies.
 
@@ -42,7 +42,8 @@ npm install @popnow/proxy
 ```
 
 **2. Set your API key on the server** from [popnow.ai/api/console/keys](https://popnow.ai/api/console/keys).
-It is read from `POPNOW_API_KEY` and never sent to the client.
+It is read from `POPNOW_API_KEY` and never sent to the client. Requests spend the key's USD API balance, which is
+separate from website credits; add funds in [API billing](https://popnow.ai/api/console/billing).
 
 ```bash
 POPNOW_API_KEY="sk-popnow-..."
@@ -95,14 +96,14 @@ By default the proxy forwards exactly the routes of the public API contract
 
 | Method               | Path                                    | Purpose                                     |
 | -------------------- | --------------------------------------- | ------------------------------------------- |
-| `POST`               | `/api/v1/jobs/quote`                    | Price a request without holding credits     |
+| `POST`               | `/api/v1/jobs/quote`                    | Price a request in USD without holding funds |
 | `POST`               | `/api/v1/jobs/createTask`               | Create a generation task                    |
 | `GET`                | `/api/v1/jobs/recordInfo`               | Poll one task                               |
 | `GET`                | `/api/v1/jobs`                          | List tasks                                  |
 | `POST`               | `/api/v1/jobs/retry`                    | Create a new task from a failed one         |
 | `POST`               | `/api/v1/jobs/purge`                    | Destroy a finished task's stored content    |
 | `GET`                | `/api/v1/models`, `/api/v1/models/{model}` | Models, prices and input schemas         |
-| `GET`                | `/api/v1/usage`, `/api/v1/chat/credit`  | Usage and credit balance                    |
+| `GET`                | `/api/v1/usage`, `/api/v1/chat/credit`  | Usage and the API USD balance               |
 | `POST`               | `/api/v1/common/upload-url`             | Upload ticket                               |
 | `POST`               | `/api/v1/files/{fileId}/commit`         | Commit an uploaded file                     |
 | `POST`               | `/api/v1/files/import`                  | Import LoRA weights from a link             |
@@ -255,7 +256,7 @@ before forwarding, so the proxy cannot be turned into an open relay for someone 
 ## Limits
 
 This hop authenticates to PopNow. It does **not** authenticate your users: anyone who can reach the route can
-spend your credits. Put your own session check, rate limit and per-user quota in front of it, exactly as you
+spend your API balance. Put your own session check, rate limit and per-user quota in front of it, exactly as you
 would for any endpoint that costs money. Use `allowedRoutes` to expose only what your app needs, for example
 no `jobs/purge` or asset deletion.
 
@@ -287,8 +288,13 @@ Next.js set `runtime = "nodejs"`; on other runtimes pass the key explicitly with
 
 ### How do I show the price before the user generates?
 
-Forward `POST /api/v1/jobs/quote` with the same `model` and `input` first; it returns the price in credits
-without holding anything (1 credit = $0.001, see [popnow.ai/pricing](https://popnow.ai/pricing)).
+Forward `POST /api/v1/jobs/quote` with the same `model` and `input` first. It returns the exact USD price
+without holding anything: `maxChargeUsd` (the most it can cost, which is held on acceptance) and
+`expectedChargeUsd` (the typical charge). Both are decimal strings with up to nine decimal places; show them as
+they are rather than parsing them into floats. To lock that price, send `createTask` with the same body plus
+`quoteId` and `expectedCostUsd: quote.maxChargeUsd`; the proxy forwards both unchanged. Prices per model are on
+[popnow.ai/api/pricing](https://popnow.ai/api/pricing). The integer credit fields such as `maxCredits` are
+deprecated; read the USD fields.
 
 ### Does the proxy retry or deduplicate requests?
 
@@ -307,13 +313,14 @@ Tests use loopback servers and injected `fetch` functions and never call the liv
 
 ## Links
 
-- Website: [popnow.ai](https://popnow.ai) · Pricing: [popnow.ai/pricing](https://popnow.ai/pricing)
+- Website: [popnow.ai](https://popnow.ai) · API pricing: [popnow.ai/api/pricing](https://popnow.ai/api/pricing) · API billing: [popnow.ai/api/console/billing](https://popnow.ai/api/console/billing)
 - Docs: [popnow.ai/docs](https://popnow.ai/docs) · API reference: [popnow.ai/docs/openapi](https://popnow.ai/docs/openapi) ([openapi.yaml](https://popnow.ai/docs/openapi.yaml)) · [llms.txt](https://popnow.ai/llms.txt)
-- MCP server for AI assistants: [popnow.ai/mcp](https://popnow.ai/mcp)
+- Developer MCP server for AI coding agents (API key, USD): [popnow.ai/api/mcp](https://popnow.ai/api/mcp)
+- Agent skills for developers: [popnow.ai/api/skills](https://popnow.ai/api/skills)
 - Other PopNow repositories:
   [popnow-js](https://github.com/popnow-ai/popnow-js) ·
   [popnow-cli](https://github.com/popnow-ai/popnow-cli) ·
-  [popnow-mcp](https://github.com/popnow-ai/popnow-mcp) ·
+  [popnow-api-mcp](https://github.com/popnow-ai/popnow-api-mcp) ·
   [popnow-skills](https://github.com/popnow-ai/popnow-skills) ·
   [popnow-python](https://github.com/popnow-ai/popnow-python) ·
   [popnow-api](https://github.com/popnow-ai/popnow-api) ·

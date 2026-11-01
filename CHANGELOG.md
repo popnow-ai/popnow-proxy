@@ -3,12 +3,17 @@
 All notable changes to this project are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and the project uses [Semantic Versioning](https://semver.org/).
 
-## [Unreleased]
+## [0.2.0] - 2026-11-01
 
 ### Changed
 
-- Docs: PopNow credits are worth $0.001 each since 2026-10-19 (they were $0.01), so prices in credits are
-  larger numbers than before. No code change.
+- The PopNow API bills in USD from its own API balance, separate from website credits. The README and
+  `llms.txt` now describe the USD quote flow (`maxChargeUsd`, confirmed with `quoteId` and `expectedCostUsd`),
+  API billing and API pricing links, and mark the credit fields as deprecated. The proxy forwards request and
+  response bodies unchanged, so no code change is needed for the USD fields.
+- Links point to the developer MCP server (`popnow.ai/api/mcp`, `popnow-ai/popnow-api-mcp`) and developer
+  skills (`popnow.ai/api/skills`).
+- The User-Agent now reports `popnow-proxy/0.2.0`.
 
 ## [0.1.0] - 2026-10-19
 

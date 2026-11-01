@@ -4,7 +4,7 @@
  *
  * JavaScript in a browser, an iOS or Android app, a desktop app - none of these can keep a secret.
  * A key shipped inside a bundle is a public key: an attacker decompiles it, or captures one
- * request, and then spends credits until the balance is gone.
+ * request, and then spends your API balance until it is gone.
  *
  * The right shape is for the client to call the developer's own server, and for that layer to add
  * the key and forward the request. This module is that layer, mounted inside a Next.js, Express or

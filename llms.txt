@@ -5,6 +5,7 @@
 ## Install
 
 - `npm install @popnow/proxy`. Set `POPNOW_API_KEY` (`sk-popnow-...`, from https://popnow.ai/api/console/keys) on the server.
+- Requests spend the key's USD API balance (separate from website credits); add funds at https://popnow.ai/api/console/billing.
 
 ## Usage
 
@@ -20,8 +21,9 @@
 - Streams bodies; passes redirects back (e.g. `/v1/videos/{id}/content`); `timeoutMs` (default 120000) bounds only the wait for response headers.
 - Refusals use the API envelope `{code, msg, request_id}`: 400 missing/invalid target, 403 origin or route not allowed, 500 no key, 502 unreachable, 504 timeout.
 - It does not authenticate end users; add session checks and rate limits in front.
+- Bodies pass through unchanged, including USD amounts: quote returns `maxChargeUsd` / `expectedChargeUsd`; confirm with `quoteId` and `expectedCostUsd: quote.maxChargeUsd` on `createTask`. Credit fields (`maxCredits`, ...) are deprecated.
 
 ## Links
 
-- Docs: https://popnow.ai/docs · OpenAPI: https://popnow.ai/docs/openapi.yaml · Pricing: https://popnow.ai/pricing
-- JavaScript SDK: https://github.com/popnow-ai/popnow-js · CLI: https://github.com/popnow-ai/popnow-cli · MCP: https://popnow.ai/mcp
+- Docs: https://popnow.ai/docs · OpenAPI: https://popnow.ai/docs/openapi.yaml · API pricing: https://popnow.ai/api/pricing
+- JavaScript SDK: https://github.com/popnow-ai/popnow-js · CLI: https://github.com/popnow-ai/popnow-cli · Developer MCP: https://popnow.ai/api/mcp (repo https://github.com/popnow-ai/popnow-api-mcp) · Agent skills: https://popnow.ai/api/skills

@@ -221,6 +221,11 @@ void test(
   "the Express adapter forwards the body with the server's key and the proxy's User-Agent",
   { timeout: 10_000 },
   async () => {
+    // A quote confirmation in the USD contract. Amounts are decimal strings with up to nine places and
+    // must reach the API byte for byte; the deprecated credit field in the reply passes back untouched.
+    const request = '{"model":"m","input":{"prompt":"a fox"},"quoteId":"q_1","expectedCostUsd":"0.067500001"}';
+    const reply =
+      '{"code":200,"msg":"success","data":{"taskId":"task_1","state":"queued","estimatedCostUsd":"0.067500001","estimatedCost":"0.067500001","estimatedCredits":68},"request_id":"req_1"}';
     const seen: { auth?: string | undefined; agent?: string | undefined; body?: string } = {};
     const upstream = await listen((req, res) => {
       let body = "";
@@ -231,7 +236,7 @@ void test(
         seen.agent = req.headers["user-agent"];
         seen.body = body;
         res.writeHead(200, { "content-type": "application/json" });
-        res.end('{"code":200,"msg":"success","data":{"taskId":"task_1"},"request_id":"req_1"}');
+        res.end(reply);
       });
     });
     const app = await listen(
@@ -245,13 +250,13 @@ void test(
           authorization: "Bearer sk-popnow-not-the-server-key",
           "content-type": "application/json",
         },
-        body: '{"model":"m","input":{"prompt":"a fox"}}',
+        body: request,
       });
       assert.equal(response.status, 200);
-      assert.match(await response.text(), /task_1/);
+      assert.equal(await response.text(), reply);
       assert.equal(seen.auth, `Bearer ${KEY}`);
       assert.equal(seen.agent, USER_AGENT);
-      assert.equal(seen.body, '{"model":"m","input":{"prompt":"a fox"}}');
+      assert.equal(seen.body, request);
     } finally {
       app.close();
       upstream.close();
