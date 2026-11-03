@@ -89,6 +89,8 @@ export const DEFAULT_ROUTES: readonly RouteRule[] = Object.freeze([
   { method: "DELETE", path: "/api/v1/assets/{assetId}" },
   // OpenAI-compatible
   { method: "GET", path: "/v1/models" },
+  { method: "POST", path: "/v1/embeddings" },
+  { method: "POST", path: "/v1/audio/speech" },
   { method: "POST", path: "/v1/videos" },
   { method: "GET", path: "/v1/videos/{videoId}" },
   { method: "GET", path: "/v1/videos/{videoId}/content" },
