@@ -143,6 +143,8 @@ void test("forwards every documented route with its documented method", () => {
     ["GET", "/api/v1/assets/entities"],
     ["GET", "/api/v1/assets/entities/ent_1"],
     ["GET", "/v1/models"],
+    ["POST", "/v1/embeddings"],
+    ["POST", "/v1/audio/speech"],
     ["POST", "/v1/videos"],
     ["GET", "/v1/videos/vid_1"],
     ["GET", "/v1/videos/vid_1/content"],
