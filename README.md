@@ -3,7 +3,7 @@
     <picture>
       <source media="(prefers-color-scheme: dark)" srcset="assets/popnow-wordmark-dark.png">
       <source media="(prefers-color-scheme: light)" srcset="assets/popnow-wordmark.png">
-      <img alt="PopNow" src="assets/popnow-wordmark.png" width="280">
+      <img alt="PopNow AI" src="assets/popnow-wordmark.png" width="280">
     </picture>
   </a>
 </p>
@@ -24,9 +24,11 @@
   <a href="https://popnow.ai/docs"><img alt="Docs" src="https://img.shields.io/badge/docs-popnow.ai%2Fdocs-111.svg"></a>
 </p>
 
-PopNow is a browser-based AI studio for videos, images and music: image-to-video, text-to-video, AI images,
+PopNow AI ([popnow.ai](https://popnow.ai)) is the world's first AI creative studio that pays you back, a browser-based studio for videos, images and music: image-to-video, text-to-video, AI images,
 music and speech, one-tap trending video effects and image styles, with models such as Kling, Seedance, Wan,
 Vidu, MiniMax, Nano Banana, GPT Image, Flux and Suno.
+
+Every API call is quoted in USD before it runs, and failed tasks are refunded to your API balance automatically.
 
 A key compiled into a client is a public key. Anyone can open the bundle or watch one request, and then spend
 your API balance until it runs out. The fix is not obfuscation; it is to never put the key there. The app calls
